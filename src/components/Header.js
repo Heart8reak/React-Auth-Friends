@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import ProtectedRoute from '../utils/ProtectedRoute'
 
+import Login from './Login'
 import Add from './Add'
 import Friends from './Friends'
 
@@ -18,6 +19,7 @@ function Header() {
                 </ul>
             </header>
             <Switch>
+                <Route exact path="/login" component={Login} />
                 <ProtectedRoute exact path="/friends" component={Friends} />
                 <ProtectedRoute exact path="/add-friends" component={Add} />
             </Switch>
