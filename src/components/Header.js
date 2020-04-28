@@ -15,13 +15,13 @@ function Header() {
                     <Link to="/login">Login</Link>
                     <Link to="/add-friends">Add Friends</Link>
                     <Link to="/friends">Friends</Link>
-                    <Link to="/login">Logout</Link>
+                    <Link onClick={localStorage.clear()} to="/login">Logout</Link>
                 </ul>
             </header>
             <Switch>
-                <Route exact path="/login" component={Login} />
                 <ProtectedRoute exact path="/friends" component={Friends} />
                 <ProtectedRoute exact path="/add-friends" component={Add} />
+                <Route exact path="/login" component={Login} />
             </Switch>
         </div>
     )

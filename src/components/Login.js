@@ -1,73 +1,77 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 import { Form, Spinner } from 'react-bootstrap'
 
-const Login = props => {
-    const [login, setLogin] = useState({
-        username: "",
-        password: ""
-    })
-    const [loading, setLoading] = useState(false)
-
-    const handleChaneges = e => {
-        setLogin({
-            ...login,
-            [e.target.name]: e.target.value
-        })
+class Login extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            isLoading: false,
+            credentials: {
+                username: '',
+                password: ''
+            }
+        }
     }
 
-    const onSubmit = e => {
+    handleChange = e => {
+        this.setState({credentials: {
+            ...this.state.credentials,
+            [e.target.name]: e.target.value
+        }})
+        console.log(this.state.credentials)
+    }
+
+    handleSubmit = e => {
         e.preventDefault()
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 3000)
+        this.setState({...this.state, isLoading: true})
         axiosWithAuth()
-        .post("/login", login)
+        .post('/login', this.state.credentials)
         .then(res => {
-            localStorage.setItem("token", res.data.payload)
-            setLogin(login)
-            setLogin({
-                username: "",
-                password: ""
-            })
-            props.history.push("/friends")
+            console.log(res)
+            localStorage.setItem('token', res.data.payload)
+            this.setState({...this.state, isLoading: false})
+            this.props.history.push('/friends')
         })
         .catch(err => {
-            localStorage.removeItem("token")
-            console.log("Sorry try to Log in again", err)
-        }, [])
+            console.log(err)
+            this.setState({...this.state, isLoading: false})
+        })
     }
-    return (
-        <div> 
-            {!loading ? (
-                <form onSubmit={onSubmit}>
-                    <Form.Control 
-                    type="text"
-                    placeholder="Username"
-                    name="username"
-                    onChange={handleChaneges}
-                    value={login.username}
-                    />
-                    <Form.Control 
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    onChange={handleChaneges}
-                    value={login.password}
-                    />
-                    <br />
-                    <button>Log in</button>
-                </form>
-            ) : (
-                <div>
-                    <Spinner variant="primary" animation="grow" />
-                    <Spinner variant="primary" animation="grow" />
-                    <Spinner variant="primary" animation="grow" />
-                </div>
-            )}
-        </div>
-    )
+
+    render() {
+        return (
+            <div> 
+                {!this.isLoading ? (
+                    <form onSubmit={this.handleSubmit}>
+                        <Form.Control 
+                        type="text"
+                        placeholder="Username"
+                        name="username"
+                        onChange={this.handleChange}
+                        value={this.username}
+                        />
+                        <Form.Control 
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        onChange={this.handleChange}
+                        value={this.password}
+                        />
+                        <br />
+                        <button>Log in</button>
+                    </form>
+                ) : (
+                    <div>
+                        <Spinner variant="primary" animation="grow" />
+                        <Spinner variant="primary" animation="grow" />
+                        <Spinner variant="primary" animation="grow" />
+                    </div>
+                )}
+            </div>
+        )
+    }
+
 }
 
 export default Login

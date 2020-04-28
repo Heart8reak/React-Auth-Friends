@@ -1,60 +1,72 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
-import { Card, Spinner } from 'react-bootstrap'
+import { Form, Col } from 'react-bootstrap'
 
 
 const Add = () => {
-    const [info, setInfo] = useState([])
-    const [loading, setLoading] = useState(false)
+    const addFriendLayout = {
+        name: "",
+        age: "",
+        email: "",
+        id: Date.now()
+    }
 
-    useEffect(() => {
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 3000)
+    const [data, setData] = useState(addFriendLayout)
+
+    const handleChanges = e => {
+        setData({ ...data, [e.target.name]: e.target.value })
+    }
+
+    const add = e => {
+        e.preventDefault()
+        setData({ ...data })
         axiosWithAuth()
-            .get('/friends')
+            .post("friends", data)
             .then(res => {
-                console.log("List of Friends from the API:", res.data)
-                setInfo(res.data)
+                console.log("You just added a new friend to your list", res)
+                setData(addFriendLayout)
             })
             .catch(err => {
-                console.log('You broke it!', err)
+                console.log("No data to dispay, because you broek it!", err)
             })
-    }, [])
-
+    }
     return (
         <div>
-            {!loading ? (
-                <div>
-                    <Spinner variant="primary" animation="grow" />
-                    <Spinner variant="primary" animation="grow" />
-                    <Spinner variant="primary" animation="grow" />
-                </div>
-            ) : (
-                    <div>
-                        {info.map(friend => {
-                            return (
-                                <section key={friend.id}>
-                                    <Card>
-                                        <Card.Body>
-                                            <Card.Title>{friend.name}</Card.Title>
-                                            <Card.Subtitle>
-                                                {friend.age}
-                                            </Card.Subtitle>
-                                            <Card.Text>
-                                                {friend.email}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </section>
-                            )
-                        })
-                        }
-                    </div>
-                )
-            }
+            <Form onSubmit={add}>
+                <h3>Add a New Friend</h3>
+                <Form.Group>
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            name="name"
+                            placeholder="Name"
+                            onChange={handleChanges}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group>
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            name="age"
+                            placeholder="Age"
+                            onChange={handleChanges}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group>
+                    <Col>
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            onChange={handleChanges}
+                        />
+                    </Col>
+                </Form.Group>
+                <button variant="outline-secondary">Add Friend</button>
+            </Form>
         </div>
     )
 }
