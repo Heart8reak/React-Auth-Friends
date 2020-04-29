@@ -5,6 +5,7 @@ import { Form, Col } from 'react-bootstrap'
 
 
 const Add = () => {
+    // const history = useHistory()
     const addFriendLayout = {
         name: "",
         age: "",
@@ -26,9 +27,15 @@ const Add = () => {
             .then(res => {
                 console.log("You just added a new friend to your list", res)
                 setData(addFriendLayout)
+                // history.push("/friends")
             })
             .catch(err => {
                 console.log("No data to dispay, because you broek it!", err)
+            })
+            setData({
+                name: "",
+                age: "",
+                email: ""
             })
     }
     return (

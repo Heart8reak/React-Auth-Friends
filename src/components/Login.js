@@ -36,13 +36,14 @@ class Login extends React.Component {
         })
     }
 
-    componentDidMount() {
-        localStorage.clear()
-    }
+    // componentDidMount() {
+    //     localStorage.clear()
+    // }
 
     render() {
         return (
             <div> 
+                <br />
                 {!this.isLoading ? (
                     <form onSubmit={this.handleSubmit}>
                         <Form.Control 
@@ -59,6 +60,7 @@ class Login extends React.Component {
                         onChange={this.handleChange}
                         value={this.password}
                         />
+                        <br />
                         <br />
                         <button>Log in</button>
                     </form>
