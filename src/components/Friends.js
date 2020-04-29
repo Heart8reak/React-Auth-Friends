@@ -8,9 +8,9 @@ const Friends = () => {
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 3000)
+        // setTimeout(() => {
+        //     setLoading(false)
+        // }, 5000)
         axiosWithAuth()
             .get('/friends')
             .then(res => {
@@ -32,6 +32,7 @@ const Friends = () => {
                 </div>
             ) : (
                     <div>
+                        <h2>List of Friends</h2>
                         {info.map(friend => {
                             return (
                                 <section key={friend.id}>

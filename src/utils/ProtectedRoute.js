@@ -9,7 +9,7 @@ const ProtectedRoute = ({ component: Component, ...props }) => {
                 if (localStorage.getItem('token')) {
                     return <Component {...renderProps} /> 
                 } else {
-                    return <Redirect to="/friends" />
+                    return <Redirect to="/login" />
                 }
             }}
         />

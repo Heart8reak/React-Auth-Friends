@@ -3,16 +3,13 @@ import { axiosWithAuth } from '../utils/axiosWithAuth'
 import { Form, Spinner } from 'react-bootstrap'
 
 class Login extends React.Component {
-    constructor() {
-        super()
-        this.state = {
+        state = {
             isLoading: false,
             credentials: {
                 username: '',
                 password: ''
             }
         }
-    }
 
     handleChange = e => {
         this.setState({credentials: {
@@ -30,13 +27,17 @@ class Login extends React.Component {
         .then(res => {
             console.log(res)
             localStorage.setItem('token', res.data.payload)
-            this.setState({...this.state, isLoading: false})
+            // this.setState({...this.state, isLoading: false})
             this.props.history.push('/friends')
         })
         .catch(err => {
-            console.log(err)
+            console.log('Unable to SIGN IN!: ',err)
             this.setState({...this.state, isLoading: false})
         })
+    }
+
+    componentDidMount() {
+        localStorage.clear()
     }
 
     render() {
